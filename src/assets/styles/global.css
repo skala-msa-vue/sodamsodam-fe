@@ -105,8 +105,26 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--krds-gap-5);
+  gap: var(--krds-gap-10);
   width: 100%;
+  min-height: var(--krds-size-height-8);
+}
+
+.app-header__start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6.4rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.app-header__menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5.6rem;
+  min-width: 0;
 }
 
 /* KRDS Masthead 문구를 배경 바의 정확한 수직 중앙에 정렬 */
@@ -146,16 +164,18 @@ img {
   white-space: nowrap;
 }
 
-.app-header__tagline {
-  margin: 0;
-  padding-left: var(--krds-gap-4);
-  border-left: 1px solid var(--krds-light-color-divider-gray);
-  font-size: var(--krds-pc-font-size-label-xsmall);
-  color: var(--krds-light-color-text-subtle);
-  line-height: 1.4;
+.app-header__nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0;
+  font-size: var(--krds-pc-font-size-heading-small);
+  font-weight: var(--krds-font-weight-bold);
+  color: var(--krds-light-color-text-bolder);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
-.app-header__nav-link {
+.app-header__utility {
   display: inline-flex;
   align-items: center;
   min-height: var(--krds-size-height-5);
@@ -166,11 +186,32 @@ img {
 }
 
 .app-header__nav-link.router-link-active,
-.app-header__nav-link.active {
+.app-header__nav-link.active,
+.app-header__utility.router-link-active,
+.app-header__utility.active {
   color: var(--krds-light-color-element-primary);
 }
 
 @media (max-width: 767px) {
+  .app-header__primary {
+    gap: var(--krds-gap-4);
+    min-height: var(--krds-size-height-7);
+  }
+
+  .app-header__start {
+    gap: var(--krds-gap-5);
+    flex-wrap: wrap;
+  }
+
+  .app-header__menu {
+    gap: var(--krds-gap-6);
+    width: 100%;
+  }
+
+  .app-header__nav-link {
+    font-size: var(--krds-mobile-font-size-label-large);
+  }
+
   .app-header__wordmark {
     gap: var(--krds-gap-3);
   }
@@ -182,10 +223,6 @@ img {
 
   .app-header__name {
     font-size: var(--krds-mobile-font-size-heading-small);
-  }
-
-  .app-header__tagline {
-    font-size: var(--krds-mobile-font-size-label-xsmall);
   }
 }
 

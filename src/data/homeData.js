@@ -1,11 +1,25 @@
+import pensionImage from '@/assets/images/home/연금.jpg.avif'
+import savingsImage from '@/assets/images/home/저축.jpg'
+import smallBusinessImage from '@/assets/images/home/소상공인.jpg'
+import policyTogetherImage from '@/assets/images/home/hero/policy-together.webp'
+import policyEligibilityImage from '@/assets/images/home/hero/policy-eligibility.webp'
+import civilServicesImage from '@/assets/images/home/hero/civil-services.webp'
+
+export const homeImages = {
+  pension: pensionImage,
+  savings: savingsImage,
+  smallBusiness: smallBusinessImage
+}
+
 export const heroSlides = [
   {
     eyebrow: '맞춤 정책 찾기',
     title: '나에게 맞는 지원정책을\n한 번에 찾아보세요',
     description: '지역과 사업자 정보를 바탕으로 신청 가능한 정부 지원정책을 안내해 드립니다.',
-    buttonText: '맞춤 정책 찾기',
-    href: '/policies',
-    icon: 'benefit'
+    buttonText: '맞춤 정책 확인하기',
+    href: '/policy-match',
+    image: policyTogetherImage,
+    imageAlt: '여러 세대와 소상공인이 함께 맞춤 지원정책을 확인하는 모습'
   },
   {
     eyebrow: '신청 자격 확인',
@@ -13,7 +27,8 @@ export const heroSlides = [
     description: '몇 가지 정보만 입력하면 정책별 신청 가능 여부와 필요한 조건을 확인할 수 있습니다.',
     buttonText: '지원정책 확인하기',
     href: '/policies',
-    icon: 'policy'
+    image: policyEligibilityImage,
+    imageAlt: '가구, 소득, 지역, 업종 정보를 입력해 지원 자격을 확인하는 모습'
   },
   {
     eyebrow: '민원 서비스 안내',
@@ -21,14 +36,42 @@ export const heroSlides = [
     description: '등본, 토지대장, 여권 재발급 등 주요 정부24 서비스를 한곳에서 확인할 수 있습니다.',
     buttonText: '민원 서비스 보기',
     href: '#civil-dashboard-title',
-    icon: 'document'
+    image: civilServicesImage,
+    imageAlt: '주민증명, 토지, 여권 등 주요 민원 서비스를 온라인으로 확인하는 모습'
   }
 ]
 
 export const complexContents = [
-  { title: '기초연금', description: '노인에게 기초연금을 지급하여 안정적인 소득기반을 제공해요.', icon: 'pension', tone: 'violet' },
-  { title: '청년 저축 계좌', description: '청년의 자립과 목돈마련을 지원하는 정부의 대표 자산형성 사업이에요.', icon: 'savings', tone: 'blue' },
-  { title: '소상공인 지원', description: '소상공인 역량 및 경쟁력 강화, 특례보증 등 다양한 정책을 안내해요.', icon: 'store', tone: 'mint' }
+  {
+    title: '기초연금',
+    description: '노인에게 기초연금을 지급하여 안정적인 소득기반을 제공해요.',
+    icon: 'pension',
+    tone: 'violet',
+    image: pensionImage,
+    imageAlt: '기초연금 안내 이미지',
+    href: 'https://www.bokjiro.go.kr/ssis-tbu/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001164',
+    external: true
+  },
+  {
+    title: '청년내일저축계좌',
+    description: '청년의 자립과 목돈마련을 지원하는 정부의 대표 자산형성 사업이에요.',
+    icon: 'savings',
+    tone: 'blue',
+    image: savingsImage,
+    imageAlt: '청년내일저축계좌 안내 이미지',
+    href: 'https://www.bokjiro.go.kr/ssis-tbu/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000060',
+    external: true
+  },
+  {
+    title: '소상공인 지원',
+    description: '소상공인 역량 및 경쟁력 강화, 특례보증 등 다양한 정책을 안내해요.',
+    icon: 'store',
+    tone: 'mint',
+    image: smallBusinessImage,
+    imageAlt: '소상공인 지원 안내 이미지',
+    href: 'https://www.sbiz24.kr/',
+    external: true
+  }
 ]
 
 export const newsItems = [

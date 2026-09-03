@@ -14,7 +14,6 @@
 
         <StepIndicator
           :current-step="completed ? 4 : 3"
-          page-title="정책 신청"
           :current-step-text="completed ? '현재 4단계, 접수 완료' : '현재 3단계, 신청서 작성'"
           :steps="steps"
         />
@@ -87,14 +86,18 @@
 
               <fieldset class="consent-group" :class="{ 'has-error': consentError }">
                 <legend>필수 동의</legend>
-                <label>
-                  <input v-model="consents.personal" type="checkbox" />
-                  <span>정책 신청 처리를 위한 개인정보 수집·이용에 동의합니다.</span>
-                </label>
-                <label>
-                  <input v-model="consents.accuracy" type="checkbox" />
-                  <span>입력 정보가 사실과 다름없음을 확인합니다.</span>
-                </label>
+                <Checkbox
+                  id="consent-personal"
+                  v-model="consents.personal"
+                  size="large"
+                  label="정책 신청 처리를 위한 개인정보 수집·이용에 동의합니다."
+                />
+                <Checkbox
+                  id="consent-accuracy"
+                  v-model="consents.accuracy"
+                  size="large"
+                  label="입력 정보가 사실과 다름없음을 확인합니다."
+                />
                 <p v-if="consentError" class="field-error">{{ consentError }}</p>
               </fieldset>
 
@@ -124,6 +127,7 @@ import { useRoute } from 'vue-router'
 import {
   Badge,
   Breadcrumb,
+  Checkbox,
   Footer,
   SkipLink,
   StepIndicator,
@@ -350,22 +354,8 @@ async function submitApplication() {
   border: 0;
 }
 
-.consent-group label {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--krds-gap-3);
-  cursor: pointer;
-}
-
-.consent-group input {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: 0.15rem;
-  accent-color: var(--krds-light-color-element-primary);
-  flex-shrink: 0;
-}
-
 .field-error {
+  margin-top: var(--krds-gap-1);
   color: var(--krds-light-color-text-danger);
   font-size: var(--krds-pc-font-size-body-xsmall);
 }
