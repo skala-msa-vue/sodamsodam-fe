@@ -48,11 +48,11 @@ onMounted(async () => {
     await auth.handleCallback(code)
     const destination = auth.isInstructor
       ? { name: 'CourseList' }
-      : { name: 'MyPage' }
+      : { name: 'PolicySearch' }
 
     message.value = auth.isInstructor
       ? '로그인 완료! 정책 관리 화면으로 이동합니다.'
-      : '로그인 완료! 맞춤 정책 추천 화면으로 이동합니다.'
+      : '로그인 완료! 지원정책 검색 화면으로 이동합니다.'
 
     router.replace(destination)
   } catch (err) {
