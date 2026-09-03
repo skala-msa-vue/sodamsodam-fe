@@ -109,6 +109,20 @@ img {
   width: 100%;
 }
 
+/* KRDS Masthead 문구를 배경 바의 정확한 수직 중앙에 정렬 */
+.app-shell-top #krds-masthead .toggle-head .inner {
+  min-height: var(--krds-size-height-5);
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+}
+
+.app-shell-top #krds-masthead .toggle-head .nuri-txt {
+  min-height: var(--krds-size-height-5);
+  align-items: center;
+  line-height: var(--krds-line-height-base);
+}
+
 .app-header__wordmark {
   display: inline-flex;
   align-items: center;
