@@ -1,376 +1,203 @@
 <template>
-  <div class="page-wrapper">
+  <div class="status-page">
+    <SkipLink target-id="contents" link-text="본문 바로가기" />
     <AppHeader />
-    <div class="page-layout">
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">메뉴</div>
 
-          <router-link to="/courses" class="sidebar-item">
-            <span class="si-icon">📚</span> 강의 목록
-          </router-link>
+    <main id="contents" class="status-main">
+      <div class="contents-wrap">
+        <Breadcrumb aria-label="현재 경로" :items="breadcrumbItems" />
+        <header class="page-heading">
+          <h1>신청 현황</h1>
+          <p>제출한 정책 신청 내역과 현재 진행 상태를 확인할 수 있습니다.</p>
+        </header>
 
-          <router-link
-            v-if="!isInstructor"
-            to="/enrollments"
-            class="sidebar-item active"
-          >
-            <span class="si-icon">✅</span> 내 수강 목록
-          </router-link>
-
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">⭐</span> 마이페이지
-          </router-link>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">계정</div>
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">👤</span> 마이페이지
-          </router-link>
-          <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
-          </button>
-        </div>
-      </aside>
-
-      <main class="main-content">
-        <h1 class="page-title">내 수강 목록</h1>
-
-        <div v-if="loading" class="loading-center">
-          <div class="spinner"></div>
-        </div>
-
-        <div v-else-if="enrollments.length" class="enrollment-list fade-in">
-          <div v-for="item in enrollments" :key="item.id" class="enrollment-card">
-            <div class="enroll-thumb" :class="getThumbBg(item.course?.category)">
-              <img :src="getThumbSrc(item.course)" :alt="item.course?.title" />
-            </div>
-
-            <div class="enroll-info">
-              <span class="badge" :class="getBadge(item.course?.category)">
-                {{ item.course?.category }}
-              </span>
-              <h3 class="enroll-title">{{ item.course?.title }}</h3>
-              <p class="enroll-instructor">강사: {{ item.course?.instructorName }}</p>
-            </div>
-
-            <div class="enroll-status">
-              <span
-                :class="[
-                  'status-badge',
-                  item.status === 'ACTIVE' ? 'status-active' : 'status-pending'
-                ]"
-              >
-                {{ item.status === 'ACTIVE' ? '수강 중' : '대기 중' }}
-              </span>
-              <router-link :to="`/courses/${item.courseId}`" class="btn btn-ghost btn-sm">
-                강의 보기
-              </router-link>
-            </div>
+        <section class="status-section" aria-labelledby="status-title" aria-live="polite">
+          <div class="status-heading">
+            <h2 id="status-title">나의 신청 내역</h2>
+            <p>총 <strong>{{ applications.length }}</strong>건</p>
           </div>
-        </div>
 
-        <div v-else class="empty-state">
-          <p class="empty-icon">📭</p>
-          <p>수강 중인 강의가 없습니다.</p>
-          <router-link to="/courses" class="btn btn-primary" style="margin-top:16px;">
-            강의 둘러보기
-          </router-link>
-        </div>
-      </main>
-    </div>
+          <div v-if="applications.length" class="application-list">
+            <article v-for="item in applications" :key="item.id" class="application-item">
+              <div class="application-copy">
+                <div class="application-badges">
+                  <Badge variant="light" :color="statusColor(item.status)" size="small">
+                    {{ applicationStatusLabels[item.status] || item.status }}
+                  </Badge>
+                  <Badge variant="outline" color="gray" size="small">{{ categoryLabels[item.category] }}</Badge>
+                </div>
+                <p class="application-agency">{{ item.agency }}</p>
+                <h3>{{ item.policyTitle }}</h3>
+                <dl class="application-meta">
+                  <div><dt>신청번호</dt><dd>{{ item.id }}</dd></div>
+                  <div><dt>신청일</dt><dd>{{ formatDate(item.appliedAt) }}</dd></div>
+                  <div><dt>지원 내용</dt><dd>{{ item.support }}</dd></div>
+                </dl>
+              </div>
+              <div class="application-action">
+                <router-link :to="`/policies/${item.policyId}/check`" class="krds-btn tertiary medium">
+                  정책 다시 보기
+                </router-link>
+              </div>
+            </article>
+          </div>
+
+          <div v-else class="empty-state">
+            <h3>아직 신청한 정책이 없습니다.</h3>
+            <p>지원정책을 찾고 자격을 확인한 다음 신청해 보세요.</p>
+            <router-link to="/policies" class="krds-btn primary medium">지원정책 찾기</router-link>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <Footer
+      hide-quick-links
+      hide-identifier
+      address="소담소담은 국민에게 맞춤형 정부 지원정책을 안내하는 공공 서비스입니다."
+      copyright="© 소담소담"
+      :bottom-links="footerLinks"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { Badge, Breadcrumb, Footer, SkipLink } from 'krds-vue'
 import AppHeader from '@/components/AppHeader.vue'
-import { enrollmentApi } from '@/api/enrollment.js'
 import { useAuthStore } from '@/store/auth.js'
+import { categoryLabels } from '@/data/policyMocks.js'
+import { applicationStatusLabels, getPolicyApplications } from '@/data/policyApplications.js'
 
-const router = useRouter()
 const auth = useAuthStore()
+const applications = ref([])
+const breadcrumbItems = [
+  { text: '홈', href: '/' },
+  { text: '신청 현황', href: '/enrollments', disabled: true }
+]
+const footerLinks = [
+  { text: '개인정보 처리방침', href: '#privacy', isHighlighted: true },
+  { text: '이용약관', href: '#terms' }
+]
 
-const enrollments = ref([])
-const loading = ref(true)
-
-const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
-
-const categoryConfig = {
-  '백엔드': { bg: 'thumb-teal', badge: 'badge-teal', thumb: 'spring_boot' },
-  '프론트엔드': { bg: 'thumb-teal', badge: 'badge-teal', thumb: 'vue_js' },
-  'DevOps': { bg: 'thumb-blue', badge: 'badge-blue', thumb: 'kubernetes' },
-  '데이터': { bg: 'thumb-purple', badge: 'badge-purple', thumb: 'python' },
-  'AI': { bg: 'thumb-pink', badge: 'badge-pink', thumb: 'generative_ai' },
+function statusColor(status) {
+  if (status === 'APPROVED') return 'success'
+  if (status === 'REJECTED') return 'danger'
+  return 'information'
 }
 
-function getThumbBg(cat) {
-  return categoryConfig[cat]?.bg || 'thumb-gray'
+function formatDate(value) {
+  return new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(new Date(value))
 }
 
-function getBadge(cat) {
-  return categoryConfig[cat]?.badge || 'badge-gray'
-}
-
-function getThumbSrc(course) {
-  const key = course?.thumbnail || categoryConfig[course?.category]?.thumb
-  if (!key) return ''
-  try {
-    return new URL(`../assets/images/courses/${key}.png`, import.meta.url).href
-  } catch {
-    return ''
-  }
-}
-
-function handleLogout() {
-  auth.logout()
-  router.push('/')
-}
-
-onMounted(async () => {
-  // 강사는 이 페이지 접근 불가 → 마이페이지로 이동
-  if (isInstructor.value) {
-    console.warn('[EnrollmentView] instructor tried to access /enrollments, redirect to /mypage')
-    router.replace('/mypage')
-    return
-  }
-
-  try {
-    const res = await enrollmentApi.getMyEnrollments()
-    console.log('[EnrollmentView] my enrollments response:', res.data)
-
-    if (Array.isArray(res.data?.data)) {
-      enrollments.value = res.data.data
-    } else if (Array.isArray(res.data)) {
-      enrollments.value = res.data
-    } else {
-      enrollments.value = []
-    }
-  } catch (error) {
-    console.error('[EnrollmentView] failed to load enrollments:', error)
-    enrollments.value = []
-  } finally {
-    loading.value = false
-  }
+onMounted(() => {
+  applications.value = getPolicyApplications(auth.user?.id)
 })
 </script>
 
 <style scoped>
-.page-wrapper {
+.status-page {
   min-height: 100vh;
-  background: var(--color-bg-secondary);
-}
-
-.page-layout {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px;
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 28px;
-}
-
-.sidebar {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  background: var(--krds-light-color-surface-white);
 }
-
-.sidebar-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-bottom: 8px;
-}
-
-.sidebar-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-  padding: 8px 12px 4px;
-}
-
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  transition: var(--transition);
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  text-decoration: none;
-}
-
-.sidebar-item:hover {
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-primary);
-}
-
-.sidebar-item.active {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-weight: 500;
-}
-
-.si-icon {
-  font-size: 15px;
-}
-
-.main-content {
-  min-width: 0;
-}
-
-.page-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 24px;
-}
-
-.enrollment-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.enrollment-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  transition: var(--transition);
-}
-
-.enrollment-card:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-.enroll-thumb {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.enroll-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 8px;
-}
-
-.thumb-teal {
-  background: #E1F5EE;
-}
-
-.thumb-blue {
-  background: #E6F1FB;
-}
-
-.thumb-purple {
-  background: #EEEDFE;
-}
-
-.thumb-pink {
-  background: #FBEAF0;
-}
-
-.thumb-gray {
-  background: #F1EFE8;
-}
-
-.enroll-info {
+.status-main {
   flex: 1;
+  padding-block: var(--krds-gap-8) var(--krds-gap-10);
+}
+.status-section { margin-top: var(--krds-gap-8); }
+.status-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--krds-gap-5);
+  margin-bottom: var(--krds-gap-5);
+}
+.status-heading h2 {
+  color: var(--krds-light-color-text-bolder);
+  font-size: var(--krds-pc-font-size-heading-xsmall);
+}
+.status-heading p { color: var(--krds-light-color-text-subtle); }
+.application-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--krds-gap-4);
 }
-
-.enroll-title {
-  font-size: 15px;
-  font-weight: 600;
+.application-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--krds-gap-8);
+  padding: var(--krds-padding-8);
+  background: var(--krds-light-color-surface-white);
+  border: 1px solid var(--krds-light-color-divider-gray-light);
+  border-radius: var(--krds-radius-medium1);
 }
-
-.enroll-instructor {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-}
-
-.enroll-status {
+.application-copy { min-width: 0; }
+.application-badges {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: var(--krds-gap-2);
+  margin-bottom: var(--krds-gap-4);
 }
-
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
+.application-agency {
+  color: var(--krds-light-color-text-subtle);
+  font-size: var(--krds-pc-font-size-body-xsmall);
 }
-
-.status-active {
-  background: #E1F5EE;
-  color: #0F6E56;
+.application-item h3 {
+  margin-top: var(--krds-gap-2);
+  color: var(--krds-light-color-text-bolder);
+  font-size: var(--krds-pc-font-size-heading-small);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
-
-.status-pending {
-  background: #FAEEDA;
-  color: #854F0B;
+.application-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--krds-gap-7);
+  margin-top: var(--krds-gap-5);
 }
-
-.btn-sm {
-  padding: 7px 14px;
-  font-size: 13px;
+.application-meta dt {
+  margin-bottom: var(--krds-gap-2);
+  color: var(--krds-light-color-text-subtle);
+  font-size: var(--krds-pc-font-size-body-xsmall);
 }
-
+.application-meta dd {
+  color: var(--krds-light-color-text-bolder);
+  font-weight: var(--krds-font-weight-bold);
+  overflow-wrap: anywhere;
+}
+.application-action {
+  display: flex;
+  align-items: center;
+}
 .empty-state {
+  padding: var(--krds-padding-10) var(--krds-padding-8);
   text-align: center;
-  padding: 80px 0;
-  color: var(--color-text-muted);
+  border: 1px solid var(--krds-light-color-divider-gray-light);
+  border-radius: var(--krds-radius-medium1);
 }
-
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+.empty-state h3 {
+  color: var(--krds-light-color-text-bolder);
+  font-size: var(--krds-pc-font-size-heading-xsmall);
 }
-
-.loading-center {
-  display: flex;
-  justify-content: center;
-  padding: 80px 0;
+.empty-state p {
+  margin-block: var(--krds-gap-3) var(--krds-gap-6);
+  color: var(--krds-light-color-text-subtle);
 }
-
-.spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--color-border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@media (max-width: 767px) {
+  .status-main { padding-block: var(--krds-gap-6) var(--krds-gap-8); }
+  .application-item {
+    grid-template-columns: 1fr;
+    padding: var(--krds-padding-6);
+  }
+  .application-meta {
+    flex-direction: column;
+    gap: var(--krds-gap-3);
+  }
+  .application-action .krds-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

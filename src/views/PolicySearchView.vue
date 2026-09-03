@@ -12,7 +12,6 @@
             <h1>지원정책 찾기</h1>
             <p>사업 조건에 맞는 정책을 검색하고 신청 전 자격을 확인해 보세요.</p>
           </div>
-          <Badge variant="light" color="information" size="small">시연용 정책 데이터</Badge>
         </header>
 
         <section class="search-panel" aria-labelledby="search-title">
@@ -83,7 +82,7 @@
               </div>
               <div class="policy-action">
                 <router-link :to="`/policies/${policy.id}/check`" class="krds-btn primary medium">
-                  자격 확인하기
+                  자격 확인 및 신청
                 </router-link>
               </div>
             </article>
