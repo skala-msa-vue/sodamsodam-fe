@@ -1,25 +1,34 @@
 export const heroSlides = [
-  { eyebrow: '나와 가족을 위한 정책', title: '나와 내 가족의 보조금 혜택 정보를\n지금, 한 번에 확인해 보세요.', description: '나와 내 가족의 보조금 혜택 정보를 지금, 한 번에 확인해 보세요.', icon: 'benefit' },
-  { eyebrow: '국민이 체감하는 변화', title: '더 나은 일상을 만드는\n정부의 새로운 정책을 만나요.', description: '생활에 꼭 필요한 정책과 서비스를 쉽고 빠르게 알려드립니다.', icon: 'policy' },
-  { eyebrow: '한 곳에서 편리하게', title: '복잡한 민원 서비스를\n온라인으로 간편하게 이용하세요.', description: '필요한 민원과 증명서를 언제 어디서나 신청할 수 있습니다.', icon: 'document' },
-  { eyebrow: '모두를 위한 디지털 정부', title: '국민과 함께 만드는\n더 안전하고 편리한 대한민국', description: '국민의 목소리를 듣고 더 좋은 디지털 서비스를 만들어 갑니다.', icon: 'people' }
+  {
+    eyebrow: '맞춤 정책 찾기',
+    title: '나에게 맞는 지원정책을\n한 번에 찾아보세요',
+    description: '지역과 사업자 정보를 바탕으로 신청 가능한 정부 지원정책을 안내해 드립니다.',
+    buttonText: '맞춤 정책 찾기',
+    href: '/policies',
+    icon: 'benefit'
+  },
+  {
+    eyebrow: '신청 자격 확인',
+    title: '복잡한 지원 조건,\n간편하게 확인하세요',
+    description: '몇 가지 정보만 입력하면 정책별 신청 가능 여부와 필요한 조건을 확인할 수 있습니다.',
+    buttonText: '지원정책 확인하기',
+    href: '/policies',
+    icon: 'policy'
+  },
+  {
+    eyebrow: '민원 서비스 안내',
+    title: '자주 찾는 민원 서비스도\n빠르게 이용하세요',
+    description: '등본, 토지대장, 여권 재발급 등 주요 정부24 서비스를 한곳에서 확인할 수 있습니다.',
+    buttonText: '민원 서비스 보기',
+    href: '#civil-dashboard-title',
+    icon: 'document'
+  }
 ]
-
-export const quickMenus = [
-  ['briefcase', '사업자등록 증명'], ['wallet', '혜택 찾기'], ['map', '지방세 납세증명'], ['printer', '자동차등록원부'],
-  ['building', '여권재발급'], ['cloud', '건축물대장'], ['note', '토지이용 확인'], ['heart', '건강보험']
-].map(([icon, title], id) => ({ id, icon, title }))
 
 export const complexContents = [
   { title: '기초연금', description: '노인에게 기초연금을 지급하여 안정적인 소득기반을 제공해요.', icon: 'pension', tone: 'violet' },
   { title: '청년 저축 계좌', description: '청년의 자립과 목돈마련을 지원하는 정부의 대표 자산형성 사업이에요.', icon: 'savings', tone: 'blue' },
   { title: '소상공인 지원', description: '소상공인 역량 및 경쟁력 강화, 특례보증 등 다양한 정책을 안내해요.', icon: 'store', tone: 'mint' }
-]
-
-export const policies = [
-  { badge: '복지', title: '생활지원카드', description: '다자녀가정에 다양한 생활문화활동 혜택 지원을 위한 다둥이 행복카드를 발급하여 지원합니다.', icon: 'card' },
-  { badge: '복지', title: '에너지 효율 1등급 환급', description: '일정 규모 이상의 사업 시행 전에 에너지 수급 및 이용 효율 향상 계획을 확인하여 지원합니다.', icon: 'energy' },
-  { badge: '복지', title: '에코머니', description: '에너지 절약 카드인 에코머니로 친환경 활동 시 경제적 혜택을 돌려드리는 포인트 리워드입니다.', icon: 'eco' }
 ]
 
 export const newsItems = [
@@ -46,10 +55,62 @@ export const newsItems = [
 ]
 
 export const civilServices = [
-  { badge: '복지', title: '주민등록표 등본 발급', description: '주민등록표 등본 또는 주민등록표 초본을 발급받기 위한 민원입니다.' },
-  { badge: '복지', title: '코로나19 격리해제 사실 확인서', description: '코로나19 확진 후 격리를 완료한 자에 대한 격리해제 사실확인서 발급' },
-  { badge: '교육', title: '교통 범칙금 과태료 미납 내역 조회', description: '최근 무인단속내역 조회, 미납 범칙금 및 과태료 내역을 조회합니다.' }
+  {
+    badge: '토지',
+    title: '토지(임야)대장 등본 발급·열람',
+    description: '토지의 소재, 지번, 지목, 면적, 소유자 등의 정보를 확인하는 민원 서비스입니다. 인터넷 발급·열람은 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=13100000026&HighCtgCD=A09005&tp_seq=01',
+    external: true
+  },
+  {
+    badge: '주민등록',
+    title: '주민등록표 등본(초본) 발급',
+    description: '주민등록등본 또는 주민등록초본을 온라인으로 발급받는 민원 서비스입니다. 인터넷 발급은 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=13100000015&HighCtgCD=A01010',
+    external: true
+  },
+  {
+    badge: '자동차',
+    title: '자동차 등록원부 등본(초본) 발급·열람',
+    description: '차량 등록번호, 소유자, 저당 관련 사항 등을 확인할 수 있는 민원 서비스입니다. 인터넷 발급·열람은 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=15000000334&HighCtgCD=A03007',
+    external: true
+  },
+  {
+    badge: '건축물',
+    title: '건축물대장 등본(초본) 발급·열람',
+    description: '건물의 용도, 면적, 구조 등 건축물 정보를 확인할 수 있는 민원 서비스입니다. 인터넷 발급·열람은 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=15000000098',
+    external: true
+  },
+  {
+    badge: '가족',
+    title: '가족관계증명서',
+    description: '가족관계, 혼인, 출생 등의 관계를 증명하는 서류입니다. 인터넷 발급은 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=97400000004',
+    external: true
+  },
+  {
+    badge: '여권',
+    title: '여권 재발급',
+    description: '기존 전자여권 발급 이력이 있는 경우 온라인으로 여권 재발급을 신청할 수 있습니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12600000001',
+    external: true
+  },
+  {
+    badge: '지방세',
+    title: '지방세 납세증명',
+    description: '지방세 체납 사실이 없음을 증명하는 서류입니다. 인터넷 발급 수수료는 무료입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=13100000056',
+    external: true
+  },
+  {
+    badge: '국세',
+    title: '납세증명서',
+    description: '국세 체납 사실이 없음을 증명하는 서류로, 지방세 납세증명과는 다른 민원 서비스입니다.',
+    href: 'https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12100000011',
+    external: true
+  }
 ]
 
 export const newsTabs = ['전체', '공지사항', '자료실', '연구보고서', '자주묻는 질문']
-export const relatedSites = ['소속기관(지청 및 위원회)', '업무별 누리집', '산하기관 및 관련단체', '정부기관']

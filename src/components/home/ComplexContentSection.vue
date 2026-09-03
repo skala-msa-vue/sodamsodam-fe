@@ -9,12 +9,30 @@
                         aria-hidden="true">A<br>▱</span>
                 </article><button class="small-arrow complex-prev" aria-label="이전 콘텐츠">‹</button>
                 <div class="complex-cards">
-                    <ContentCard v-for="item in complexContents" :key="item.title" v-bind="item" />
+                    <ContentCard v-for="item in contentsWithImages" :key="item.title" v-bind="item" />
                 </div><button class="small-arrow complex-next" aria-label="다음 콘텐츠">›</button>
             </div>
             <div class="mini-indicator"><i></i><i></i></div>
         </div>
     </section>
 </template>
-<script
-    setup>    import SectionHeader from '@/components/common/SectionHeader.vue'; import ContentCard from '@/components/common/ContentCard.vue'; import { complexContents } from '@/data/homeData.js'</script>
+<script setup>
+import SectionHeader from '@/components/common/SectionHeader.vue'
+import ContentCard from '@/components/common/ContentCard.vue'
+import { complexContents } from '@/data/homeData.js'
+import pensionImage from '@/assets/images/home/연금.jpg.avif'
+import savingsImage from '@/assets/images/home/저축.jpg'
+import smallBusinessImage from '@/assets/images/home/소상공인.jpg'
+
+const imageMap = {
+    pension: pensionImage,
+    savings: savingsImage,
+    store: smallBusinessImage
+}
+
+const contentsWithImages = complexContents.map((item) => ({
+    ...item,
+    image: imageMap[item.icon],
+    imageAlt: `${item.title} 안내 이미지`
+}))
+</script>
