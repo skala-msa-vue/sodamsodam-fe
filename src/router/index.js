@@ -19,6 +19,18 @@ const routes = [
     component: () => import('@/views/CallbackView.vue')
   },
   {
+    path: '/policies',
+    name: 'PolicySearch',
+    component: () => import('@/views/PolicySearchView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/policies/:id/check',
+    name: 'PolicyEligibility',
+    component: () => import('@/views/PolicyEligibilityView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/courses',
     name: 'CourseList',
     component: () => import('@/views/CourseListView.vue'),
@@ -61,7 +73,7 @@ const router = createRouter({
 function getAuthenticatedHome(auth) {
   return auth.isInstructor
     ? { name: 'CourseList' }
-    : { name: 'MyPage' }
+    : { name: 'PolicySearch' }
 }
 
 // 인증/권한 가드

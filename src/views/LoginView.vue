@@ -305,6 +305,13 @@ const footerBottomLinks = [
 
 function handleOAuth() {
   if (oauthRedirecting.value) return
+  if (!import.meta.env.VITE_CLIENT_ID || !import.meta.env.VITE_REDIRECT_URI) {
+    formAlert.value = {
+      variant: 'danger',
+      message: '로그인 설정이 없습니다. .env의 클라이언트 정보를 확인한 뒤 개발 서버를 다시 시작해 주세요.'
+    }
+    return
+  }
   oauthRedirecting.value = true
   auth.redirectToLogin()
 }
@@ -533,7 +540,7 @@ onUpdated(() => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--krds-light-color-background-gray-subtler);
+  background: var(--krds-light-color-surface-white);
 }
 
 .sodam-main {

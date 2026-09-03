@@ -7,7 +7,7 @@
   --color-text-secondary: var(--krds-light-color-text-subtle);
   --color-text-muted: var(--krds-light-color-text-disabled);
   --color-bg-primary: var(--krds-light-color-surface-white);
-  --color-bg-secondary: var(--krds-light-color-background-gray-subtler);
+  --color-bg-secondary: var(--krds-light-color-surface-white);
   --color-bg-tertiary: var(--krds-light-color-background-gray-subtle);
   --color-border: var(--krds-light-color-divider-gray-light);
   --color-border-hover: var(--krds-light-color-border-gray);

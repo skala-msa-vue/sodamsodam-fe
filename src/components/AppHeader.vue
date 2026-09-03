@@ -21,18 +21,27 @@
           <HeaderNavi>
             <template v-if="auth.isAuthenticated">
               <router-link
+                v-if="!auth.isInstructor"
+                to="/policies"
+                class="app-header__nav-link"
+                :class="{ active: $route.path.startsWith('/policies') }"
+              >
+                정책 찾기
+              </router-link>
+              <router-link
+                v-if="auth.isInstructor"
                 to="/courses"
                 class="app-header__nav-link"
                 :class="{ active: $route.path.startsWith('/courses') }"
               >
-                강의
+                정책 관리
               </router-link>
               <router-link
                 to="/enrollments"
                 class="app-header__nav-link"
                 :class="{ active: $route.path === '/enrollments' }"
               >
-                내 학습
+                신청 현황
               </router-link>
               <router-link
                 to="/mypage"
