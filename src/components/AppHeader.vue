@@ -3,15 +3,6 @@
     <Masthead text="이 누리집은 대한민국 공식 전자정부 누리집입니다." />
 
     <Header>
-      <HeaderUtilities>
-        <HeaderUtility>
-          <Link href="/" variant="basic" size="small" underline="hover">서비스 안내</Link>
-        </HeaderUtility>
-        <HeaderUtility>
-          <Link href="#help-contact" variant="basic" size="small" underline="hover">문의하기</Link>
-        </HeaderUtility>
-      </HeaderUtilities>
-
       <HeaderContainer>
         <div class="app-header__primary">
           <div class="header-branding">
@@ -73,9 +64,6 @@ import {
   HeaderContainer,
   HeaderNavi,
   HeaderNaviButtonLogout,
-  HeaderUtilities,
-  HeaderUtility,
-  Link,
   Masthead
 } from 'krds-vue'
 import { useAuthStore } from '@/store/auth.js'
