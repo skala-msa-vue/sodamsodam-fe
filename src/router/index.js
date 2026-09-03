@@ -31,6 +31,18 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/policies/:id/apply',
+    name: 'PolicyApply',
+    component: () => import('@/views/PolicyApplyView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/policy-match',
+    name: 'PolicyMatch',
+    component: () => import('@/views/PolicyMatchView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/courses',
     name: 'CourseList',
     component: () => import('@/views/CourseListView.vue'),

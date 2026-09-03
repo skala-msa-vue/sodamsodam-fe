@@ -12,10 +12,6 @@
           <p>사업 정보를 입력하면 선택한 정책의 기본 자격조건을 확인합니다.</p>
         </header>
 
-        <CriticalAlert
-          :alerts="[{ variant: 'info', message: '현재 화면의 정책과 자격조건은 기능 시연을 위한 목업 데이터입니다.' }]"
-        />
-
         <div v-if="policy" class="check-layout">
           <aside class="policy-summary" aria-labelledby="selected-policy-title">
             <Badge variant="light" color="primary" size="small">
@@ -102,9 +98,16 @@
                 </li>
               </ul>
 
-              <p class="result-notice">
-                이 결과는 시연용 기준에 따른 사전 확인이며 실제 승인 여부는 담당기관 심사에서 결정됩니다.
-              </p>
+              <div class="result-actions">
+                <router-link
+                  v-if="result.eligible"
+                  :to="`/policies/${policy.id}/apply`"
+                  class="krds-btn primary medium"
+                >
+                  신청서 작성하기
+                </router-link>
+                <router-link to="/policies" class="krds-btn tertiary medium">다른 정책 찾기</router-link>
+              </div>
             </section>
           </section>
         </div>
@@ -129,7 +132,7 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { Badge, Breadcrumb, Button, CriticalAlert, Footer, Select, SkipLink, TextInput } from 'krds-vue'
+import { Badge, Breadcrumb, Button, Footer, Select, SkipLink, TextInput } from 'krds-vue'
 import AppHeader from '@/components/AppHeader.vue'
 import { categoryLabels, evaluateEligibility, findMockPolicy } from '@/data/policyMocks.js'
 
@@ -350,10 +353,11 @@ function checkEligibility() {
   color: var(--krds-light-color-text-danger);
 }
 
-.result-notice {
+.result-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--krds-gap-3);
   margin-top: var(--krds-gap-6);
-  color: var(--krds-light-color-text-subtle);
-  font-size: var(--krds-pc-font-size-body-xsmall);
 }
 
 .not-found {
@@ -382,6 +386,15 @@ function checkEligibility() {
   .policy-summary,
   .check-form-panel {
     padding: var(--krds-padding-6);
+  }
+
+  .result-actions {
+    flex-direction: column-reverse;
+  }
+
+  .result-actions .krds-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

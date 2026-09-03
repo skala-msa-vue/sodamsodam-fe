@@ -29,6 +29,14 @@
                 정책 찾기
               </router-link>
               <router-link
+                v-if="!auth.isInstructor"
+                to="/policy-match"
+                class="app-header__nav-link"
+                :class="{ active: $route.path.startsWith('/policy-match') }"
+              >
+                맞춤 정책 확인하기
+              </router-link>
+              <router-link
                 v-if="auth.isInstructor"
                 to="/courses"
                 class="app-header__nav-link"
@@ -42,13 +50,6 @@
                 :class="{ active: $route.path === '/enrollments' }"
               >
                 신청 현황
-              </router-link>
-              <router-link
-                to="/mypage"
-                class="app-header__nav-link"
-                :class="{ active: $route.path === '/mypage' }"
-              >
-                {{ auth.user?.name || '마이페이지' }}
               </router-link>
               <HeaderNaviButtonLogout @click="handleLogout">로그아웃</HeaderNaviButtonLogout>
             </template>
