@@ -5,7 +5,7 @@
     <Header>
       <HeaderContainer>
         <div class="app-header__primary">
-          <div class="header-branding">
+          <div class="app-header__start">
             <router-link to="/" class="app-header__wordmark" aria-label="소담소담 홈">
               <img
                 src="@/assets/images/logo/sodamsodam.png"
@@ -14,30 +14,27 @@
                 aria-hidden="true"
               />
               <span class="app-header__name">소담소담</span>
-              <span class="app-header__tagline">맞춤형 정책 지원 서비스</span>
             </router-link>
-          </div>
 
-          <HeaderNavi>
-            <template v-if="auth.isAuthenticated">
+            <nav class="app-header__menu" aria-label="주요 메뉴">
+              <template v-if="!auth.isInstructor">
+                <router-link
+                  to="/policies"
+                  class="app-header__nav-link"
+                  :class="{ active: $route.path.startsWith('/policies') }"
+                >
+                  정책 찾기
+                </router-link>
+                <router-link
+                  to="/policy-match"
+                  class="app-header__nav-link"
+                  :class="{ active: $route.path.startsWith('/policy-match') }"
+                >
+                  맞춤 정책 확인하기
+                </router-link>
+              </template>
               <router-link
-                v-if="!auth.isInstructor"
-                to="/policies"
-                class="app-header__nav-link"
-                :class="{ active: $route.path.startsWith('/policies') }"
-              >
-                정책 찾기
-              </router-link>
-              <router-link
-                v-if="!auth.isInstructor"
-                to="/policy-match"
-                class="app-header__nav-link"
-                :class="{ active: $route.path.startsWith('/policy-match') }"
-              >
-                맞춤 정책 확인하기
-              </router-link>
-              <router-link
-                v-if="auth.isInstructor"
+                v-else
                 to="/courses"
                 class="app-header__nav-link"
                 :class="{ active: $route.path.startsWith('/courses') }"
@@ -45,11 +42,24 @@
                 정책 관리
               </router-link>
               <router-link
+                v-if="auth.isAuthenticated"
                 to="/enrollments"
                 class="app-header__nav-link"
                 :class="{ active: $route.path === '/enrollments' }"
               >
                 신청 현황
+              </router-link>
+            </nav>
+          </div>
+
+          <HeaderNavi>
+            <template v-if="auth.isAuthenticated">
+              <router-link
+                to="/mypage"
+                class="app-header__utility"
+                :class="{ active: $route.path === '/mypage' }"
+              >
+                {{ auth.user?.name || '마이페이지' }}
               </router-link>
               <HeaderNaviButtonLogout @click="handleLogout">로그아웃</HeaderNaviButtonLogout>
             </template>

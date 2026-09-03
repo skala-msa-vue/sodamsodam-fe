@@ -1,5 +1,13 @@
 <template>
-  <section class="home-section policy-dashboard" aria-labelledby="policy-dashboard-title">
+  <section
+    ref="rootEl"
+    class="home-section policy-dashboard"
+    aria-labelledby="policy-dashboard-title"
+    @mouseenter="pauseHover"
+    @mouseleave="resumeHover"
+    @focusin="pauseHover"
+    @focusout="resumeHover"
+  >
     <div class="krds-container">
       <div class="policy-dashboard__heading">
         <div>
@@ -13,7 +21,7 @@
         </div>
       </div>
 
-      <div ref="cardTrack" class="policy-dashboard__track" tabindex="0" aria-label="정책 카드 목록">
+      <div ref="cardTrack" class="policy-dashboard__track" tabindex="0" aria-label="정책 카드 목록" @pointerdown="pauseHover">
         <article v-for="policy in policyMocks" :key="policy.id" class="policy-dashboard__card">
           <div class="policy-dashboard__badges">
             <span class="krds-badge bg-light-primary">{{ categoryLabels[policy.category] }}</span>
@@ -34,14 +42,30 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { categoryLabels, policyMocks } from '@/data/policyMocks.js'
+import { nextCardInTrack, useAutoplay } from '@/composables/useAutoplay.js'
 
 const cardTrack = ref(null)
+const rootEl = ref(null)
 
 function scrollCards(direction) {
   const track = cardTrack.value
   if (!track) return
-  track.scrollBy({ left: direction * Math.min(track.clientWidth * 0.8, 720), behavior: 'smooth' })
+  if (direction > 0) {
+    nextCardInTrack(track)
+  } else {
+    const card = track.querySelector(':scope > *')
+    if (!card) return
+    const styles = getComputedStyle(track)
+    const gap = Number.parseFloat(styles.columnGap || styles.gap) || 0
+    const step = card.getBoundingClientRect().width + gap
+    track.scrollBy({ left: -step, behavior: 'smooth' })
+  }
+  restart()
 }
+
+const { pauseHover, resumeHover, observe, restart } = useAutoplay(() => nextCardInTrack(cardTrack.value))
+
+onMounted(() => observe(rootEl.value))
 </script>
