@@ -3,15 +3,6 @@
     <Masthead text="이 누리집은 대한민국 공식 전자정부 누리집입니다." />
 
     <Header>
-      <HeaderUtilities>
-        <HeaderUtility>
-          <Link href="/" variant="basic" size="small" underline="hover">서비스 안내</Link>
-        </HeaderUtility>
-        <HeaderUtility>
-          <Link href="#help-contact" variant="basic" size="small" underline="hover">문의하기</Link>
-        </HeaderUtility>
-      </HeaderUtilities>
-
       <HeaderContainer>
         <div class="app-header__primary">
           <div class="header-branding">
@@ -30,18 +21,27 @@
           <HeaderNavi>
             <template v-if="auth.isAuthenticated">
               <router-link
+                v-if="!auth.isInstructor"
+                to="/policies"
+                class="app-header__nav-link"
+                :class="{ active: $route.path.startsWith('/policies') }"
+              >
+                정책 찾기
+              </router-link>
+              <router-link
+                v-if="auth.isInstructor"
                 to="/courses"
                 class="app-header__nav-link"
                 :class="{ active: $route.path.startsWith('/courses') }"
               >
-                강의
+                정책 관리
               </router-link>
               <router-link
                 to="/enrollments"
                 class="app-header__nav-link"
                 :class="{ active: $route.path === '/enrollments' }"
               >
-                내 학습
+                신청 현황
               </router-link>
               <router-link
                 to="/mypage"
@@ -73,9 +73,6 @@ import {
   HeaderContainer,
   HeaderNavi,
   HeaderNaviButtonLogout,
-  HeaderUtilities,
-  HeaderUtility,
-  Link,
   Masthead
 } from 'krds-vue'
 import { useAuthStore } from '@/store/auth.js'
