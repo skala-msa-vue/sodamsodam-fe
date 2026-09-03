@@ -46,8 +46,15 @@ onMounted(async () => {
 
   try {
     await auth.handleCallback(code)
-    message.value = '로그인 완료! 이동 중입니다...'
-    router.replace('/courses')
+    const destination = auth.isInstructor
+      ? { name: 'CourseList' }
+      : { name: 'MyPage' }
+
+    message.value = auth.isInstructor
+      ? '로그인 완료! 정책 관리 화면으로 이동합니다.'
+      : '로그인 완료! 맞춤 정책 추천 화면으로 이동합니다.'
+
+    router.replace(destination)
   } catch (err) {
     console.error('OAuth callback 처리 실패:', err)
     message.value = '로그인 처리에 실패했습니다.'

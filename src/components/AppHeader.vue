@@ -1,36 +1,83 @@
 <template>
-  <header class="app-header">
-    <div class="header-inner">
-      <!-- 로고 -->
-      <router-link to="/" class="logo">
-        <img src="@/assets/images/logo/main_logo.png" alt="LearnNexus" class="logo-img" />
-        <span class="logo-text">LearnNexus</span>
-      </router-link>
+  <div class="app-shell-top">
+    <Masthead text="이 누리집은 대한민국 공식 전자정부 누리집입니다." />
 
-      <!-- 네비게이션 -->
-      <nav class="nav-links" v-if="auth.isAuthenticated">
-        <router-link to="/courses" class="nav-link" :class="{ active: $route.path.startsWith('/courses') }">강의</router-link>
-        <router-link to="/enrollments" class="nav-link" :class="{ active: $route.path === '/enrollments' }">내 학습</router-link>
-      </nav>
+    <Header>
+      <HeaderUtilities>
+        <HeaderUtility>
+          <Link href="/" variant="basic" size="small" underline="hover">서비스 안내</Link>
+        </HeaderUtility>
+        <HeaderUtility>
+          <Link href="#help-contact" variant="basic" size="small" underline="hover">문의하기</Link>
+        </HeaderUtility>
+      </HeaderUtilities>
 
-      <!-- 우측 액션 -->
-      <div class="header-actions">
-        <template v-if="auth.isAuthenticated">
-          <router-link to="/mypage" class="user-avatar" :title="auth.user?.name">
-            {{ auth.user?.name?.charAt(0) || '?' }}
-          </router-link>
-          <button class="btn btn-ghost btn-sm" @click="handleLogout">로그아웃</button>
-        </template>
-        <template v-else>
-          <router-link to="/login" class="btn btn-ghost btn-sm">로그인</router-link>
-          <router-link to="/login" class="btn btn-primary btn-sm">시작하기</router-link>
-        </template>
-      </div>
-    </div>
-  </header>
+      <HeaderContainer>
+        <div class="app-header__primary">
+          <div class="header-branding">
+            <router-link to="/" class="app-header__wordmark" aria-label="소담소담 홈">
+              <img
+                src="@/assets/images/logo/sodamsodam.png"
+                alt=""
+                class="app-header__mark"
+                aria-hidden="true"
+              />
+              <span class="app-header__name">소담소담</span>
+              <span class="app-header__tagline">맞춤형 정책 지원 서비스</span>
+            </router-link>
+          </div>
+
+          <HeaderNavi>
+            <template v-if="auth.isAuthenticated">
+              <router-link
+                to="/courses"
+                class="app-header__nav-link"
+                :class="{ active: $route.path.startsWith('/courses') }"
+              >
+                강의
+              </router-link>
+              <router-link
+                to="/enrollments"
+                class="app-header__nav-link"
+                :class="{ active: $route.path === '/enrollments' }"
+              >
+                내 학습
+              </router-link>
+              <router-link
+                to="/mypage"
+                class="app-header__nav-link"
+                :class="{ active: $route.path === '/mypage' }"
+              >
+                {{ auth.user?.name || '마이페이지' }}
+              </router-link>
+              <HeaderNaviButtonLogout @click="handleLogout">로그아웃</HeaderNaviButtonLogout>
+            </template>
+            <router-link
+              v-else
+              to="/login"
+              class="btn-navi login"
+              aria-label="로그인 화면으로 이동"
+            >
+              로그인
+            </router-link>
+          </HeaderNavi>
+        </div>
+      </HeaderContainer>
+    </Header>
+  </div>
 </template>
 
 <script setup>
+import {
+  Header,
+  HeaderContainer,
+  HeaderNavi,
+  HeaderNaviButtonLogout,
+  HeaderUtilities,
+  HeaderUtility,
+  Link,
+  Masthead
+} from 'krds-vue'
 import { useAuthStore } from '@/store/auth.js'
 import { useRouter } from 'vue-router'
 
@@ -42,87 +89,3 @@ function handleLogout() {
   router.push('/')
 }
 </script>
-
-<style scoped>
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-}
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-.logo-img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  border-radius: 8px;
-}
-.logo-text {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  letter-spacing: -0.3px;
-}
-.nav-links {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-}
-.nav-link {
-  padding: 6px 14px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  transition: var(--transition);
-}
-.nav-link:hover,
-.nav-link.active {
-  color: var(--color-primary);
-  background: var(--color-primary-light);
-}
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-}
-.btn-sm {
-  padding: 7px 16px;
-  font-size: 13px;
-}
-.user-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 13px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.user-avatar:hover {
-  background: var(--color-primary);
-  color: #fff;
-}
-</style>

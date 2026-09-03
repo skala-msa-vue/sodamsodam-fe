@@ -58,6 +58,12 @@ const router = createRouter({
   }
 })
 
+function getAuthenticatedHome(auth) {
+  return auth.isInstructor
+    ? { name: 'CourseList' }
+    : { name: 'MyPage' }
+}
+
 // 인증/권한 가드
 router.beforeEach((to) => {
   const auth = useAuthStore()
@@ -67,7 +73,7 @@ router.beforeEach((to) => {
   }
 
   if (to.meta.guestOnly && auth.isAuthenticated) {
-    return { name: 'CourseList' }
+    return getAuthenticatedHome(auth)
   }
 
   if (to.meta.instructorOnly && auth.user?.role !== 'INSTRUCTOR') {

@@ -1,30 +1,30 @@
 :root {
-  --color-primary: #185FA5;
-  --color-primary-dark: #0C447C;
-  --color-primary-light: #E6F1FB;
-  --color-secondary: #378ADD;
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #6b7280;
-  --color-text-muted: #9ca3af;
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
-  --color-success: #0F6E56;
-  --color-success-light: #E1F5EE;
-  --color-warning: #854F0B;
-  --color-warning-light: #FAEEDA;
-  --color-danger: #dc2626;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-  --shadow-lg: 0 10px 32px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
-  --transition: all 0.2s ease;
+  --color-primary: var(--krds-light-color-element-primary);
+  --color-primary-dark: var(--krds-color-light-primary-70);
+  --color-primary-light: var(--krds-light-color-element-primary-lighter);
+  --color-secondary: var(--krds-light-color-element-secondary);
+  --color-text-primary: var(--krds-light-color-text-bolder);
+  --color-text-secondary: var(--krds-light-color-text-subtle);
+  --color-text-muted: var(--krds-light-color-text-disabled);
+  --color-bg-primary: var(--krds-light-color-surface-white);
+  --color-bg-secondary: var(--krds-light-color-background-gray-subtler);
+  --color-bg-tertiary: var(--krds-light-color-background-gray-subtle);
+  --color-border: var(--krds-light-color-divider-gray-light);
+  --color-border-hover: var(--krds-light-color-border-gray);
+  --color-success: var(--krds-light-color-element-success);
+  --color-success-light: var(--krds-light-color-surface-success-subtler);
+  --color-warning: var(--krds-light-color-element-warning);
+  --color-warning-light: var(--krds-light-color-surface-warning-subtler);
+  --color-danger: var(--krds-light-color-element-danger);
+  --radius-sm: var(--krds-radius-medium1);
+  --radius-md: var(--krds-radius-medium2);
+  --radius-lg: var(--krds-radius-large1);
+  --radius-xl: var(--krds-radius-large1);
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --font-sans: var(--krds-font-family-base), "Pretendard GOV", sans-serif;
+  --transition: var(--krds-transition-base);
 }
 
 *, *::before, *::after {
@@ -34,7 +34,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: var(--krds-font-size-base);
   scroll-behavior: smooth;
 }
 
@@ -42,8 +42,9 @@ body {
   font-family: var(--font-sans);
   color: var(--color-text-primary);
   background: var(--color-bg-secondary);
-  line-height: 1.6;
+  line-height: var(--krds-line-height-base);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 a {
@@ -54,8 +55,6 @@ a {
 button {
   cursor: pointer;
   font-family: var(--font-sans);
-  border: none;
-  outline: none;
 }
 
 img {
@@ -63,30 +62,126 @@ img {
   display: block;
 }
 
+/* 공통 레이아웃 */
+.contents-wrap {
+  width: 100%;
+  max-width: var(--krds-contents-wrap-size);
+  margin: 0 auto;
+  padding-left: var(--krds-contents-padding-x);
+  padding-right: var(--krds-contents-padding-x);
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--krds-gap-3);
+  margin-bottom: var(--krds-gap-8);
+}
+
+.page-heading h1 {
+  font-size: var(--krds-pc-font-size-heading-large);
+  font-weight: var(--krds-font-weight-bold);
+  color: var(--krds-light-color-text-bolder);
+  line-height: var(--krds-line-height-none);
+  letter-spacing: -0.02em;
+}
+
+.page-heading p {
+  font-size: var(--krds-pc-font-size-body-medium);
+  color: var(--krds-light-color-text-subtle);
+}
+
+@media (max-width: 767px) {
+  .page-heading h1 {
+    font-size: var(--krds-mobile-font-size-heading-large);
+  }
+
+  .page-heading p {
+    font-size: var(--krds-mobile-font-size-body-medium);
+  }
+}
+
+.app-header__primary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--krds-gap-5);
+  width: 100%;
+}
+
+.app-header__wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--krds-gap-4);
+  min-height: var(--krds-size-height-7);
+}
+
+.app-header__mark {
+  width: var(--krds-size-height-7);
+  height: var(--krds-size-height-7);
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: var(--krds-radius-medium1);
+}
+
+.app-header__name {
+  font-size: var(--krds-pc-font-size-heading-small);
+  font-weight: var(--krds-font-weight-bold);
+  color: var(--krds-light-color-text-bolder);
+  line-height: var(--krds-line-height-none);
+  white-space: nowrap;
+}
+
+.app-header__tagline {
+  margin: 0;
+  padding-left: var(--krds-gap-4);
+  border-left: 1px solid var(--krds-light-color-divider-gray);
+  font-size: var(--krds-pc-font-size-label-xsmall);
+  color: var(--krds-light-color-text-subtle);
+  line-height: 1.4;
+}
+
+.app-header__nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--krds-size-height-5);
+  padding: var(--krds-padding-2) var(--krds-padding-4);
+  font-size: var(--krds-pc-font-size-label-small);
+  font-weight: var(--krds-font-weight-bold);
+  color: var(--krds-light-color-text-basic);
+}
+
+.app-header__nav-link.router-link-active,
+.app-header__nav-link.active {
+  color: var(--krds-light-color-element-primary);
+}
+
+@media (max-width: 767px) {
+  .app-header__wordmark {
+    gap: var(--krds-gap-3);
+  }
+
+  .app-header__mark {
+    width: var(--krds-size-height-6);
+    height: var(--krds-size-height-6);
+  }
+
+  .app-header__name {
+    font-size: var(--krds-mobile-font-size-heading-small);
+  }
+
+  .app-header__tagline {
+    font-size: var(--krds-mobile-font-size-label-xsmall);
+  }
+}
+
 /* 스크롤바 */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-bg-tertiary); }
-::-webkit-scrollbar-thumb { background: var(--color-border-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--color-border-hover); border-radius: var(--radius-sm); }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
 
-/* 애니메이션 */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.fade-in-up  { animation: fadeInUp  0.4s ease both; }
-.fade-in     { animation: fadeIn    0.3s ease both; }
-
-/* 공통 버튼 */
+/* 기존 화면 호환 버튼 — KRDS 버튼(.krds-btn)에는 적용하지 않음 */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -99,14 +194,12 @@ img {
 }
 .btn-primary {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--krds-color-light-gray-0);
   border: 1.5px solid var(--color-primary);
 }
 .btn-primary:hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 .btn-outline {
   background: transparent;
@@ -130,13 +223,13 @@ img {
 .badge {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-sm);
   font-size: 11px;
   font-weight: 500;
 }
-.badge-blue   { background: #E6F1FB; color: #185FA5; }
-.badge-teal   { background: #E1F5EE; color: #0F6E56; }
-.badge-amber  { background: #FAEEDA; color: #854F0B; }
-.badge-purple { background: #EEEDFE; color: #534AB7; }
-.badge-pink   { background: #FBEAF0; color: #993556; }
-.badge-gray   { background: #F1EFE8; color: #5F5E5A; }
+.badge-blue   { background: var(--krds-light-color-element-primary-lighter); color: var(--krds-light-color-element-primary); }
+.badge-teal   { background: var(--krds-light-color-surface-success-subtler); color: var(--krds-light-color-element-success); }
+.badge-amber  { background: var(--krds-light-color-surface-warning-subtler); color: var(--krds-light-color-element-warning); }
+.badge-purple { background: var(--krds-light-color-surface-point-subtler); color: var(--krds-light-color-element-point); }
+.badge-pink   { background: var(--krds-light-color-surface-danger-subtler); color: var(--krds-light-color-element-danger); }
+.badge-gray   { background: var(--krds-light-color-element-gray-lighter); color: var(--krds-light-color-text-subtle); }
